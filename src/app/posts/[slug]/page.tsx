@@ -2,25 +2,24 @@ import { getPostBySlug, getAllPosts } from '@/lib/payload';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
 
-type Params = {
-  slug: string;
-};
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
-// ✅ FIXED: Don't try to infer type from another generic
-export async function generateStaticParams(): Promise<Params[]> {
+// Generate static params for all posts
+export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-export async function generateMetadata(
-  { params }: { params: Params }
-): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
-
+// Generate metadata for SEO
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  
   if (!post) {
     return {
       title: 'Post Not Found',
@@ -33,12 +32,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function BlogPost({
-  params,
-}: {
-  params: Params;
-}) {
-  const post = await getPostBySlug(params.slug);
+export default async function BlogPost({ params }: PageProps) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
@@ -54,28 +50,28 @@ export default async function BlogPost({
 
       <article>
         {post.featuredImage && (
-          <img
-            src={post.featuredImage.url}
+          <img 
+            src={post.featuredImage.url} 
             alt={post.featuredImage.alt || post.title}
             className="w-full h-64 md:h-96 object-cover rounded-lg mb-6"
           />
         )}
-
+        
         <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-
+        
         <div className="text-gray-600 mb-8 text-sm">
           {format(new Date(post.publishedDate), 'MMMM d, yyyy')}
           {post.author && ` • By ${post.author}`}
         </div>
-
-        <div
+        
+        <div 
           className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
-
+      
       <div className="mt-12 pt-8 border-t">
-        <Link
+        <Link 
           href="/"
           className="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors"
         >
@@ -86,4 +82,5 @@ export default async function BlogPost({
   );
 }
 
+// Enable static generation
 export const dynamic = 'force-static';
