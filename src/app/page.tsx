@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getAllPosts } from '@/lib/payload';
 import { format } from 'date-fns';
 
@@ -16,9 +17,11 @@ export default async function BlogIndex() {
           {posts.map((post) => (
             <article key={post.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
               {post.featuredImage && (
-                <img 
+                <Image 
                   src={post.featuredImage.url} 
                   alt={post.featuredImage.alt || post.title}
+                  width={400}
+                  height={192}
                   className="w-full h-48 object-cover rounded-lg mb-4"
                 />
               )}

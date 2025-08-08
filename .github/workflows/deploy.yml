@@ -24,7 +24,7 @@ jobs:
     - name: Build
       run: npm run build
       env:
-        PAYLOAD_API_URL: ${{ secrets.PAYLOAD_API_URL }}
+        PAYLOAD_API_URL: 'https://dr-serzhans-psycare.onrender.com'
         # No API key needed
 
     - name: Deploy to GitHub Pages

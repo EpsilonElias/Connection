@@ -1,4 +1,4 @@
-const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL;
+const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
 export interface BlogPost {
   id: string;
@@ -16,13 +16,15 @@ export interface BlogPost {
 
 // Fetch all blog posts - no API key
 export async function getAllPosts(): Promise<BlogPost[]> {
-  if (!PAYLOAD_API_URL) {
+  const apiUrl = PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+  
+  if (!apiUrl) {
     console.warn('PAYLOAD_API_URL not configured, returning empty array');
     return [];
   }
 
   try {
-    const url = `${PAYLOAD_API_URL}/api/posts`;
+    const url = `${apiUrl}/api/posts`;
     console.log('Fetching from:', url);
     
     const response = await fetch(url, {
@@ -46,13 +48,15 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
 // Fetch a single post by slug - no API key
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  if (!PAYLOAD_API_URL) {
+  const apiUrl = PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+  
+  if (!apiUrl) {
     console.warn('PAYLOAD_API_URL not configured');
     return null;
   }
 
   try {
-    const url = `${PAYLOAD_API_URL}/api/posts?where[slug][equals]=${slug}`;
+    const url = `${apiUrl}/api/posts?where[slug][equals]=${slug}`;
     console.log('Fetching post:', url);
     
     const response = await fetch(url, {
