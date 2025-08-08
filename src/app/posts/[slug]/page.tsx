@@ -9,10 +9,23 @@ interface PageProps {
 
 // Generate static params for all posts
 export async function generateStaticParams() {
-  const posts = await getAllPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  try {
+    const posts = await getAllPosts();
+    console.log('Posts found:', posts.length); // Debug log
+    
+    if (!posts || posts.length === 0) {
+      console.warn('No posts found, returning empty array');
+      return [];
+    }
+    
+    return posts.map((post) => ({
+      slug: post.slug,
+    }));
+  } catch (error) {
+    console.error('Error in generateStaticParams:', error);
+    // Return empty array to prevent build failure
+    return [];
+  }
 }
 
 // Generate metadata for SEO
