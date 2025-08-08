@@ -4,23 +4,21 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
-// ✅ This is the proper type expected by Next.js
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
+type Params = {
+  slug: string;
+};
 
-// Generate static params for SSG
-export async function generateStaticParams(): Promise<PageProps['params'][]> {
+// ✅ FIXED: Don't try to infer type from another generic
+export async function generateStaticParams(): Promise<Params[]> {
   const posts = await getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-// Generate SEO metadata
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: Params }
+): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
@@ -35,8 +33,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-// The actual blog post page
-export default async function BlogPost({ params }: PageProps) {
+export default async function BlogPost({
+  params,
+}: {
+  params: Params;
+}) {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
@@ -53,8 +54,8 @@ export default async function BlogPost({ params }: PageProps) {
 
       <article>
         {post.featuredImage && (
-          <img 
-            src={post.featuredImage.url} 
+          <img
+            src={post.featuredImage.url}
             alt={post.featuredImage.alt || post.title}
             className="w-full h-64 md:h-96 object-cover rounded-lg mb-6"
           />
@@ -74,7 +75,7 @@ export default async function BlogPost({ params }: PageProps) {
       </article>
 
       <div className="mt-12 pt-8 border-t">
-        <Link 
+        <Link
           href="/"
           className="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors"
         >
