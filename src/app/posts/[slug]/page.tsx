@@ -2,25 +2,25 @@ import { getPostBySlug, getAllPosts } from '@/lib/payload';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 
-type Params = {
-  slug: string;
-};
+// ✅ This is the proper type expected by Next.js
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
 
-// Generate static params for all posts
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
+// Generate static params for SSG
+export async function generateStaticParams(): Promise<PageProps['params'][]> {
   const posts = await getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
-// Generate metadata for SEO
-export async function generateMetadata(
-  { params }: { params: Params },
-  _parent?: ResolvingMetadata
-): Promise<Metadata> {
+// Generate SEO metadata
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
@@ -35,11 +35,8 @@ export async function generateMetadata(
   };
 }
 
-type BlogPostProps = {
-  params: Params;
-};
-
-export default async function BlogPost({ params }: BlogPostProps) {
+// The actual blog post page
+export default async function BlogPost({ params }: PageProps) {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
@@ -88,5 +85,4 @@ export default async function BlogPost({ params }: BlogPostProps) {
   );
 }
 
-// Enable static generation
 export const dynamic = 'force-static';
