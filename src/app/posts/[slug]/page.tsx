@@ -2,9 +2,14 @@ import { getPostBySlug, getAllPosts } from '@/lib/payload';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Metadata, ResolvingMetadata } from 'next';
+
+type Params = {
+  slug: string;
+};
 
 // Generate static params for all posts
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = await getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
@@ -12,9 +17,12 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(
+  { params }: { params: Params },
+  _parent?: ResolvingMetadata
+): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
-  
+
   if (!post) {
     return {
       title: 'Post Not Found',
@@ -27,7 +35,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }) {
+type BlogPostProps = {
+  params: Params;
+};
+
+export default async function BlogPost({ params }: BlogPostProps) {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
@@ -50,20 +62,20 @@ export default async function BlogPost({ params }: { params: { slug: string } })
             className="w-full h-64 md:h-96 object-cover rounded-lg mb-6"
           />
         )}
-        
+
         <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        
+
         <div className="text-gray-600 mb-8 text-sm">
           {format(new Date(post.publishedDate), 'MMMM d, yyyy')}
           {post.author && ` • By ${post.author}`}
         </div>
-        
-        <div 
+
+        <div
           className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
-      
+
       <div className="mt-12 pt-8 border-t">
         <Link 
           href="/"
