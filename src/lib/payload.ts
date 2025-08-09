@@ -29,7 +29,8 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     
     const response = await fetch(url, {
       // No Authorization header needed
-      cache: 'no-store'
+      cache: 'force-cache', // Use cache during build for better performance
+      next: { revalidate: 3600 } // Cache for 1 hour during development
     });
 
     if (!response.ok) {
@@ -61,7 +62,8 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     
     const response = await fetch(url, {
       // No Authorization header needed
-      cache: 'no-store'
+      cache: 'force-cache', // Use cache during build for better performance
+      next: { revalidate: 3600 } // Cache for 1 hour during development
     });
 
     if (!response.ok) {
