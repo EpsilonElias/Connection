@@ -1,4 +1,6 @@
-const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+
+console.log('Using PAYLOAD_API_URL:', PAYLOAD_API_URL);
 
 
 export interface BlogPost {

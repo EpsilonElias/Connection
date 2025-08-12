@@ -33,7 +33,6 @@ jobs:
       run: npm run build
       env:
         PAYLOAD_API_URL: 'https://dr-serzhans-psycare.onrender.com'
-        # No API key needed
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
