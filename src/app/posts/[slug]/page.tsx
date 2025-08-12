@@ -3,24 +3,32 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { RichText } from '@payloadcms/richtext-lexical/react';
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>; // Changed to Promise
+}
+
+// Type guard to check if content is a valid Lexical object
+function isLexicalContent(content: unknown): content is { root: { children: unknown[] } } {
+  return content !== null && 
+         typeof content === 'object' && 
+         content !== undefined &&
+         'root' in content && 
+         typeof (content as Record<string, unknown>).root === 'object';
 }
 
 // Generate static params for all posts
 export async function generateStaticParams() {
   try {
     const posts = await getAllPosts();
-    console.log('Posts found:', posts.length); // Debug log
+    console.log('Posts found:', posts.length);
     
     if (!posts || posts.length === 0) {
       console.warn('No posts found, using fallback route');
-      // Return at least one static param to satisfy Next.js export requirements
       return [{ slug: 'no-posts-available' }];
     }
     
-    // Filter out posts without valid slugs and log them
     const validPosts = posts.filter((post) => {
       if (!post.slug || typeof post.slug !== 'string') {
         console.warn('Post without valid slug found:', post.id || 'unknown', post.title || 'no title');
@@ -41,14 +49,13 @@ export async function generateStaticParams() {
     }));
   } catch (error) {
     console.error('Error in generateStaticParams:', error);
-    // Return fallback route to prevent build failure
     return [{ slug: 'no-posts-available' }];
   }
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug } = await params; // Added await
   const post = await getPostBySlug(slug);
   
   if (!post) {
@@ -64,7 +71,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function BlogPost({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug } = await params; // Added await
   
   // Handle the fallback case
   if (slug === 'no-posts-available') {
@@ -111,6 +118,7 @@ export default async function BlogPost({ params }: PageProps) {
             width={800}
             height={400}
             className="w-full h-64 md:h-96 object-cover rounded-lg mb-6"
+            unoptimized // Add this for static export
           />
         )}
         
@@ -121,10 +129,12 @@ export default async function BlogPost({ params }: PageProps) {
           {post.author && ` • By ${post.author}`}
         </div>
         
-        <div 
-          className="prose prose-lg max-w-none"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+        {post.content && isLexicalContent(post.content) && (
+          <div className="prose prose-lg max-w-none">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <RichText data={post.content as any} />
+          </div>
+        )}
       </article>
       
       <div className="mt-12 pt-8 border-t">
@@ -138,6 +148,3 @@ export default async function BlogPost({ params }: PageProps) {
     </div>
   );
 }
-
-// Enable static generation
-export const dynamic = 'force-static';

@@ -1,9 +1,10 @@
 const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
 
+
 export interface BlogPost {
   id: string;
   title: string;
-  content: string;
+  content: string | object; // Can be either HTML string or Lexical object
   slug: string;
   publishedDate: string;
   author?: string;
@@ -14,23 +15,22 @@ export interface BlogPost {
   };
 }
 
-// Fetch all blog posts - no API key
+// Fetch all blog posts
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const apiUrl = PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
-  
-  if (!apiUrl) {
-    console.warn('PAYLOAD_API_URL not configured, returning empty array');
-    return [];
-  }
-
   try {
-    const url = `${apiUrl}/api/posts`;
-    console.log('Fetching from:', url);
+    if (!PAYLOAD_API_URL) {
+      console.log('PAYLOAD_API_URL not configured, returning empty array');
+      return [];
+    }
+
+    console.log('Fetching from:', `${PAYLOAD_API_URL}/api/posts`);
     
-    const response = await fetch(url, {
-      // No Authorization header needed
-      cache: 'force-cache', // Use cache during build for better performance
-      next: { revalidate: 3600 } // Cache for 1 hour during development
+    const response = await fetch(`${PAYLOAD_API_URL}/api/posts?where[status][equals]=published&sort=-publishedDate`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Important for SSG - fetch fresh data at build time
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -39,7 +39,8 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     }
 
     const data = await response.json();
-    console.log('Fetched posts:', data.docs?.length || 0);
+    console.log('API Response:', data);
+    
     return data.docs || [];
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -47,28 +48,22 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   }
 }
 
-// Fetch a single post by slug - no API key
+// Fetch a single post by slug
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const apiUrl = PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
-  
-  if (!apiUrl) {
-    console.warn('PAYLOAD_API_URL not configured');
-    return null;
-  }
-
   try {
-    const url = `${apiUrl}/api/posts?where[slug][equals]=${slug}`;
-    console.log('Fetching post:', url);
-    
-    const response = await fetch(url, {
-      // No Authorization header needed
-      cache: 'force-cache', // Use cache during build for better performance
-      next: { revalidate: 3600 } // Cache for 1 hour during development
+    if (!PAYLOAD_API_URL) {
+      return null;
+    }
+
+    const response = await fetch(`${PAYLOAD_API_URL}/api/posts?where[slug][equals]=${slug}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store'
     });
 
     if (!response.ok) {
-      console.error(`Failed to fetch post: ${response.status} ${response.statusText}`);
-      return null;
+      throw new Error(`Failed to fetch post: ${response.status}`);
     }
 
     const data = await response.json();
