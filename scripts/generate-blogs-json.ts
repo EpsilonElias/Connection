@@ -31,7 +31,7 @@ function lexicalToHtml(content: any): string {
   if (content.root && Array.isArray(content.root.children)) {
     return content.root.children.map((node: any) => {
       if (node.type === 'paragraph') {
-        const text = (node.children || []).map((child: any) => {
+        const content = (node.children || []).map((child: any) => {
           if (child.text) {
             let text = child.text;
             // Apply formatting
@@ -39,14 +39,98 @@ function lexicalToHtml(content: any): string {
             if (child.format && child.format & 2) text = `<em>${text}</em>`;
             if (child.format && child.format & 8) text = `<u>${text}</u>`;
             return text;
+          } else if (child.type === 'upload') {
+            // Handle image uploads within paragraphs
+            let src = child.value?.url || (typeof child.src === 'string' ? child.src : '');
+            const alt = child.value?.alt || child.alt || 'Image';
+            const width = child.width || '';
+            const height = child.height || '';
+            
+            if (src) {
+              // Ensure absolute URL
+              if (!src.startsWith('http')) {
+                const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+                src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
+              }
+              
+              let imgTag = `<img src="${src}" alt="${alt}"`;
+              if (width) imgTag += ` width="${width}"`;
+              if (height) imgTag += ` height="${height}"`;
+              imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
+              return imgTag;
+            }
+            return '';
+          } else if (child.type === 'image') {
+            // Handle direct image nodes within paragraphs
+            let src = child.src || child.url || '';
+            const alt = child.alt || child.altText || 'Image';
+            const width = child.width || '';
+            const height = child.height || '';
+            
+            if (src) {
+              // Ensure absolute URL
+              if (!src.startsWith('http')) {
+                const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+                src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
+              }
+              
+              let imgTag = `<img src="${src}" alt="${alt}"`;
+              if (width) imgTag += ` width="${width}"`;
+              if (height) imgTag += ` height="${height}"`;
+              imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
+              return imgTag;
+            }
+            return '';
           }
           return '';
         }).join('');
-        return text ? `<p>${text}</p>` : '';
+        return content ? `<p>${content}</p>` : '';
       } else if (node.type === 'heading') {
         const text = (node.children || []).map((child: any) => child.text || '').join('');
         const level = Math.min(Math.max(node.tag ? parseInt(node.tag.replace('h', '')) : 2, 1), 6);
         return text ? `<h${level}>${text}</h${level}>` : '';
+      } else if (node.type === 'upload') {
+        // Handle image uploads within content
+        let src = node.value?.url || (typeof node.src === 'string' ? node.src : '');
+        const alt = node.value?.alt || node.alt || 'Image';
+        const width = node.width || '';
+        const height = node.height || '';
+        
+        if (src) {
+          // Ensure absolute URL
+          if (!src.startsWith('http')) {
+            const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+            src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
+          }
+          
+          let imgTag = `<img src="${src}" alt="${alt}"`;
+          if (width) imgTag += ` width="${width}"`;
+          if (height) imgTag += ` height="${height}"`;
+          imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
+          return imgTag;
+        }
+        return '';
+      } else if (node.type === 'image') {
+        // Handle direct image nodes
+        let src = node.src || node.url || '';
+        const alt = node.alt || node.altText || 'Image';
+        const width = node.width || '';
+        const height = node.height || '';
+        
+        if (src) {
+          // Ensure absolute URL
+          if (!src.startsWith('http')) {
+            const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+            src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
+          }
+          
+          let imgTag = `<img src="${src}" alt="${alt}"`;
+          if (width) imgTag += ` width="${width}"`;
+          if (height) imgTag += ` height="${height}"`;
+          imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
+          return imgTag;
+        }
+        return '';
       } else if (node.type === 'list') {
         const listItems = (node.children || []).map((item: any) => {
           if (item.type === 'listitem') {
@@ -90,6 +174,19 @@ async function main() {
         .replace(/(^-|-$)/g, '');
     }
     
+    // Process featured image URL - ensure we have the full URL
+    let featuredImageUrl = '';
+    if (post.featuredImage) {
+      if (typeof post.featuredImage === 'string') {
+        featuredImageUrl = post.featuredImage;
+      } else if (post.featuredImage.url) {
+        // Ensure full URL
+        featuredImageUrl = post.featuredImage.url.startsWith('http') 
+          ? post.featuredImage.url 
+          : `${process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com'}${post.featuredImage.url}`;
+      }
+    }
+    
     return {
       id: post.id,
       title: post.title,
@@ -97,7 +194,7 @@ async function main() {
       excerpt: post.excerpt,
       publishedDate: post.publishedDate,
       author: post.author,
-      featuredImage: post.featuredImage?.url || '',
+      featuredImage: featuredImageUrl,
       contentHtml: lexicalToHtml(post.content),
     };
   });

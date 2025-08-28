@@ -1,5 +1,50 @@
 [
   {
+    "id": "68a8edd1df6eb82cc6541623",
+    "title": "image testing blog",
+    "slug": "image-test",
+    "excerpt": "this checks if the image shows",
+    "publishedDate": "2025-08-22T22:22:25.748Z",
+    "featuredImage": "",
+    "contentHtml": "<img src=\"https://dr-serzhans-psycare.onrender.com/api/media/file/forest.jpg\" alt=\"name-forest\" style=\"max-width: 100%; height: auto; display: block; margin: 20px 0;\" />"
+  },
+  {
+    "id": "68a8db0a511e34d9c39d22f2",
+    "title": "Understanding Anxiety and How Therapy Can Help",
+    "slug": "understanding-anxiety",
+    "excerpt": "Anxiety",
+    "publishedDate": "2025-08-22T20:59:42.992Z",
+    "featuredImage": "",
+    "contentHtml": "<p>Anxiety is one of the most common mental health challenges people face today. It can show up in many forms—racing thoughts, restlessness, constant worrying, or even physical symptoms like a rapid heartbeat and tense muscles. While occasional anxiety is a normal part of life, ongoing or overwhelming anxiety can interfere with daily activities, relationships, and overall well-being. Recognizing when anxiety is more than just “normal stress” is the first step toward getting support.</p><img src=\"https://dr-serzhans-psycare.onrender.com/api/media/file/forest.jpg\" alt=\"name-forest\" style=\"max-width: 100%; height: auto; display: block; margin: 20px 0;\" /><p>Therapy offers a safe space to explore these feelings and learn new ways of coping. Cognitive Behavioral Therapy (CBT), for example, helps people identify unhelpful thought patterns and replace them with healthier ones. Other approaches, such as mindfulness-based therapy or acceptance and commitment therapy, can also teach skills for managing anxious thoughts without becoming consumed by them. By practicing these tools in a supportive environment, many individuals find their anxiety becomes more manageable over time.</p><p>What’s most important to remember is that you don’t have to go through anxiety alone. Working with a therapist provides not only strategies for handling symptoms but also encouragement and accountability. Small steps, like learning relaxation techniques or setting boundaries, can build confidence and reduce the power anxiety has over your life. With the right guidance, therapy can help transform anxiety from a constant source of fear into a challenge that can be understood and managed.</p>"
+  },
+  {
+    "id": "689c3d8b7315b9896cc0d982",
+    "title": "Trauma across a lifetime",
+    "slug": "Trauma-Across",
+    "excerpt": "More information here",
+    "publishedDate": "2025-08-13T07:21:45.848Z",
+    "featuredImage": "",
+    "contentHtml": "<ul><li>○ Influence of early childhood exposure to stress and punishment</li><li>○ Influence of coping mechanisms learned and integrated</li><li>○ Supportive environment</li></ul>"
+  },
+  {
+    "id": "689bc5c8c6a631d4d1de3c38",
+    "title": "Blog about therapy",
+    "slug": "blog-therapy-details",
+    "excerpt": "The details of therapy",
+    "publishedDate": "2025-08-12T22:51:16.584Z",
+    "featuredImage": "",
+    "contentHtml": "<h1>This is a blog about therapy and its benefits.</h1><p>in this blog ill talk about the benefits of therapy.</p><p>more stuff about therapy</p><p>and more stuff about therapy</p><p>and even more stuff about therapy.</p>"
+  },
+  {
+    "id": "689bbe3d4f4d1c435363fb0e",
+    "title": "this is a blog for a new age",
+    "slug": "new-age",
+    "excerpt": "this blog is to test the latest fixes I applied",
+    "publishedDate": "2025-08-12T22:19:21.761Z",
+    "featuredImage": "",
+    "contentHtml": "<h1>a quick test for the header and stuff</h1><p>followed by some paragraphs and some other stuff</p><p>this is just to test it more</p><p>and to add more stuff</p><p>and more stuff</p><h1>and a header ending</h1>"
+  },
+  {
     "id": "6896f5e35ee7a25638b8293a",
     "title": "Working Through Guilt",
     "slug": "working-through-guilt",
@@ -43,14 +88,5 @@
     "publishedDate": "2025-07-18T23:35:10.264Z",
     "featuredImage": "",
     "contentHtml": "<ul><li>○</li></ul>"
-  },
-  {
-    "id": "687ad93965fecdcafe509386",
-    "title": "test blog for website",
-    "slug": "test-blog-for-website",
-    "excerpt": "this is to see if things will upload",
-    "publishedDate": "2025-07-18T23:30:22.627Z",
-    "featuredImage": "",
-    "contentHtml": "<ul><li>✓</li></ul>"
   }
 ]
