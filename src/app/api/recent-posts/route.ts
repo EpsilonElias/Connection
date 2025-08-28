@@ -22,7 +22,9 @@ function lexicalToHtml(content: any): string {
               const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
               src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
             }
-            return `<img src="${src}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
+            // Use CORS proxy to avoid browser blocking
+            const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+            return `<img src="${proxiedSrc}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
           }
           return '';
         } else if (child.type === 'image') {
@@ -36,7 +38,9 @@ function lexicalToHtml(content: any): string {
               const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
               src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
             }
-            return `<img src="${src}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
+            // Use CORS proxy to avoid browser blocking
+            const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+            return `<img src="${proxiedSrc}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
           }
           return '';
         }
@@ -54,7 +58,9 @@ function lexicalToHtml(content: any): string {
           const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
           src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
         }
-        return `<img src="${src}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
+        // Use CORS proxy to avoid browser blocking
+        const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+        return `<img src="${proxiedSrc}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
       }
       return '';
     } else if (node.type === 'image') {
@@ -68,7 +74,9 @@ function lexicalToHtml(content: any): string {
           const baseUrl = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
           src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
         }
-        return `<img src="${src}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
+        // Use CORS proxy to avoid browser blocking
+        const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+        return `<img src="${proxiedSrc}" alt="${alt}" style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />`;
       }
       return '';
     }

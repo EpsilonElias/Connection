@@ -53,7 +53,10 @@ function lexicalToHtml(content: any): string {
                 src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
               }
               
-              let imgTag = `<img src="${src}" alt="${alt}"`;
+              // Use CORS proxy to avoid browser blocking
+              const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+              
+              let imgTag = `<img src="${proxiedSrc}" alt="${alt}"`;
               if (width) imgTag += ` width="${width}"`;
               if (height) imgTag += ` height="${height}"`;
               imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
@@ -74,7 +77,10 @@ function lexicalToHtml(content: any): string {
                 src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
               }
               
-              let imgTag = `<img src="${src}" alt="${alt}"`;
+              // Use CORS proxy to avoid browser blocking
+              const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+              
+              let imgTag = `<img src="${proxiedSrc}" alt="${alt}"`;
               if (width) imgTag += ` width="${width}"`;
               if (height) imgTag += ` height="${height}"`;
               imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
@@ -103,7 +109,10 @@ function lexicalToHtml(content: any): string {
             src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
           }
           
-          let imgTag = `<img src="${src}" alt="${alt}"`;
+          // Use CORS proxy to avoid browser blocking
+          const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+          
+          let imgTag = `<img src="${proxiedSrc}" alt="${alt}"`;
           if (width) imgTag += ` width="${width}"`;
           if (height) imgTag += ` height="${height}"`;
           imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
@@ -124,7 +133,10 @@ function lexicalToHtml(content: any): string {
             src = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
           }
           
-          let imgTag = `<img src="${src}" alt="${alt}"`;
+          // Use CORS proxy to avoid browser blocking
+          const proxiedSrc = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=800&q=85`;
+          
+          let imgTag = `<img src="${proxiedSrc}" alt="${alt}"`;
           if (width) imgTag += ` width="${width}"`;
           if (height) imgTag += ` height="${height}"`;
           imgTag += ' style="max-width: 100%; height: auto; display: block; margin: 20px 0;" />';
