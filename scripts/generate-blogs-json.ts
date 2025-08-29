@@ -238,16 +238,21 @@ async function main() {
         .replace(/(^-|-$)/g, '');
     }
     
-    // Process featured image URL - ensure we have the full URL
+    // Process featured image URL - prioritize GridFS URLs
     let featuredImageUrl = '';
     if (post.featuredImage) {
       if (typeof post.featuredImage === 'string') {
         featuredImageUrl = post.featuredImage;
+      } else if (post.featuredImage.gridfsUrl) {
+        // First priority: GridFS URL (persistent storage)
+        featuredImageUrl = `${process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com'}${post.featuredImage.gridfsUrl}`;
+        console.log(`🎯 Featured image using GridFS URL: ${featuredImageUrl}`);
       } else if (post.featuredImage.url) {
-        // Ensure full URL
+        // Fallback: regular URL
         featuredImageUrl = post.featuredImage.url.startsWith('http') 
           ? post.featuredImage.url 
           : `${process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com'}${post.featuredImage.url}`;
+        console.log(`⚠️ Featured image using legacy URL: ${featuredImageUrl}`);
       }
     }
     
