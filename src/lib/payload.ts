@@ -27,7 +27,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
     console.log('Fetching from:', `${PAYLOAD_API_URL}/api/posts`);
     
-    const response = await fetch(`${PAYLOAD_API_URL}/api/posts?where[status][equals]=published&sort=-publishedDate`, {
+    const response = await fetch(`${PAYLOAD_API_URL}/api/posts?where[status][equals]=published&sort=-publishedDate&depth=2`, {
       headers: {
         'Content-Type': 'application/json',
       },

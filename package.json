@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "prebuild": "cross-env PAYLOAD_API_URL=https://dr-serzhans-psycare.onrender.com tsx scripts/generate-blogs-json.ts",
     "build": "next build && cross-env PAYLOAD_API_URL=https://dr-serzhans-psycare.onrender.com tsx scripts/generate-blogs-json.ts",
+    "generate-blogs": "cross-env PAYLOAD_API_URL=https://dr-serzhans-psycare.onrender.com tsx scripts/generate-blogs-json.ts",
     "start": "next start",
     "lint": "next lint"
   },

@@ -1,12 +1,21 @@
 [
   {
+    "id": "68b14cdd768f45d84b4b9e87",
+    "title": "nov image test",
+    "slug": "nov",
+    "excerpt": "this is the latest test on 8 28",
+    "publishedDate": "2025-08-29T06:46:13.147Z",
+    "featuredImage": "",
+    "contentHtml": "<img src=\"https://images.weserv.nl/?url=https%3A%2F%2Fdr-serzhans-psycare.onrender.com%2Fapi%2Fmedia%2Ffile%2Fbook.png&w=800&q=85\" alt=\"new book\" style=\"max-width: 100%; height: auto; display: block; margin: 20px 0;\" />"
+  },
+  {
     "id": "68a8edd1df6eb82cc6541623",
     "title": "image testing blog",
     "slug": "image-test",
     "excerpt": "this checks if the image shows",
     "publishedDate": "2025-08-22T22:22:25.748Z",
-    "featuredImage": "",
-    "contentHtml": "<img src=\"https://images.weserv.nl/?url=https%3A%2F%2Fdr-serzhans-psycare.onrender.com%2Fapi%2Fmedia%2Ffile%2Fforest.jpg&w=800&q=85\" alt=\"name-forest\" style=\"max-width: 100%; height: auto; display: block; margin: 20px 0;\" />"
+    "featuredImage": "68a8ec5edf6eb82cc65415cf",
+    "contentHtml": "<img src=\"https://images.weserv.nl/?url=https%3A%2F%2Fdr-serzhans-psycare.onrender.com%2Fapi%2Fmedia%2Ffile%2Fbook.png&w=800&q=85\" alt=\"new book\" style=\"max-width: 100%; height: auto; display: block; margin: 20px 0;\" />"
   },
   {
     "id": "68a8db0a511e34d9c39d22f2",
@@ -14,8 +23,8 @@
     "slug": "understanding-anxiety",
     "excerpt": "Anxiety",
     "publishedDate": "2025-08-22T20:59:42.992Z",
-    "featuredImage": "",
-    "contentHtml": "<p>Anxiety is one of the most common mental health challenges people face today. It can show up in many forms—racing thoughts, restlessness, constant worrying, or even physical symptoms like a rapid heartbeat and tense muscles. While occasional anxiety is a normal part of life, ongoing or overwhelming anxiety can interfere with daily activities, relationships, and overall well-being. Recognizing when anxiety is more than just “normal stress” is the first step toward getting support.</p><img src=\"https://images.weserv.nl/?url=https%3A%2F%2Fdr-serzhans-psycare.onrender.com%2Fapi%2Fmedia%2Ffile%2Fforest.jpg&w=800&q=85\" alt=\"name-forest\" style=\"max-width: 100%; height: auto; display: block; margin: 20px 0;\" /><p>Therapy offers a safe space to explore these feelings and learn new ways of coping. Cognitive Behavioral Therapy (CBT), for example, helps people identify unhelpful thought patterns and replace them with healthier ones. Other approaches, such as mindfulness-based therapy or acceptance and commitment therapy, can also teach skills for managing anxious thoughts without becoming consumed by them. By practicing these tools in a supportive environment, many individuals find their anxiety becomes more manageable over time.</p><p>What’s most important to remember is that you don’t have to go through anxiety alone. Working with a therapist provides not only strategies for handling symptoms but also encouragement and accountability. Small steps, like learning relaxation techniques or setting boundaries, can build confidence and reduce the power anxiety has over your life. With the right guidance, therapy can help transform anxiety from a constant source of fear into a challenge that can be understood and managed.</p>"
+    "featuredImage": "https://dr-serzhans-psycare.onrender.com/api/media/file/book.png",
+    "contentHtml": "<p>Anxiety is one of the most common mental health challenges people face today. It can show up in many forms—racing thoughts, restlessness, constant worrying, or even physical symptoms like a rapid heartbeat and tense muscles. While occasional anxiety is a normal part of life, ongoing or overwhelming anxiety can interfere with daily activities, relationships, and overall well-being. Recognizing when anxiety is more than just “normal stress” is the first step toward getting support.</p><img src=\"https://images.weserv.nl/?url=https%3A%2F%2Fdr-serzhans-psycare.onrender.com%2Fapi%2Fmedia%2Ffile%2Fbook.png&w=800&q=85\" alt=\"new book\" style=\"max-width: 100%; height: auto; display: block; margin: 20px 0;\" /><p>Therapy offers a safe space to explore these feelings and learn new ways of coping. Cognitive Behavioral Therapy (CBT), for example, helps people identify unhelpful thought patterns and replace them with healthier ones. Other approaches, such as mindfulness-based therapy or acceptance and commitment therapy, can also teach skills for managing anxious thoughts without becoming consumed by them. By practicing these tools in a supportive environment, many individuals find their anxiety becomes more manageable over time.</p><p>What’s most important to remember is that you don’t have to go through anxiety alone. Working with a therapist provides not only strategies for handling symptoms but also encouragement and accountability. Small steps, like learning relaxation techniques or setting boundaries, can build confidence and reduce the power anxiety has over your life. With the right guidance, therapy can help transform anxiety from a constant source of fear into a challenge that can be understood and managed.</p>"
   },
   {
     "id": "689c3d8b7315b9896cc0d982",
@@ -79,14 +88,5 @@
     "publishedDate": "2025-07-26T20:16:21.238Z",
     "featuredImage": "",
     "contentHtml": "<ul><li>✓</li></ul>"
-  },
-  {
-    "id": "687ada473e5e39ea9ce907b5",
-    "title": "test blog 2",
-    "slug": "test-blog-2",
-    "excerpt": "Now if you see this, it means that you see two blogs",
-    "publishedDate": "2025-07-18T23:35:10.264Z",
-    "featuredImage": "",
-    "contentHtml": "<ul><li>○</li></ul>"
   }
 ]

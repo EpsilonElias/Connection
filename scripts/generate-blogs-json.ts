@@ -5,6 +5,22 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 
+// Type definition for Post object
+interface Post {
+  id: string;
+  title: string;
+  slug?: string;
+  excerpt?: string;
+  publishedDate: string;
+  featuredImage?: string | {
+    url: string;
+    gridfsUrl?: string;
+  };
+  content?: any;
+  contentHtml?: string;
+  author?: string;
+}
+
 // Load environment variables from multiple possible locations
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
@@ -41,7 +57,20 @@ function lexicalToHtml(content: any): string {
             return text;
           } else if (child.type === 'upload') {
             // Handle image uploads within paragraphs
-            let src = child.value?.url || (typeof child.src === 'string' ? child.src : '');
+            let src = '';
+            
+            // First, try to use GridFS URL if available
+            if (child.value?.gridfsUrl) {
+              src = child.value.gridfsUrl;
+              console.log(`🎯 Using GridFS URL: ${src}`);
+            } else if (child.value?.url) {
+              src = child.value.url;
+              console.log(`📁 Using regular URL: ${src}`);
+            } else if (typeof child.src === 'string') {
+              src = child.src;
+              console.log(`🔗 Using direct src: ${src}`);
+            }
+            
             const alt = child.value?.alt || child.alt || 'Image';
             const width = child.width || '';
             const height = child.height || '';
@@ -97,7 +126,17 @@ function lexicalToHtml(content: any): string {
         return text ? `<h${level}>${text}</h${level}>` : '';
       } else if (node.type === 'upload') {
         // Handle image uploads within content
-        let src = node.value?.url || (typeof node.src === 'string' ? node.src : '');
+        let src = '';
+        
+        // First, try to use GridFS URL if available
+        if (node.value?.gridfsUrl) {
+          src = node.value.gridfsUrl;
+        } else if (node.value?.url) {
+          src = node.value.url;
+        } else if (typeof node.src === 'string') {
+          src = node.src;
+        }
+        
         const alt = node.value?.alt || node.alt || 'Image';
         const width = node.width || '';
         const height = node.height || '';
@@ -175,8 +214,21 @@ function lexicalToHtml(content: any): string {
 }
 
 async function main() {
-  const posts = await getAllPosts();
-  const blogs = posts.map(post => {
+  console.log('Starting blog generation...');
+  
+  // Fetch posts directly with full depth instead of using getAllPosts
+  const PAYLOAD_API_URL = process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com';
+  
+  const response = await fetch(`${PAYLOAD_API_URL}/api/posts?where[status][equals]=published&sort=-publishedDate&depth=3`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch posts: ${response.status}`);
+  }
+  const data = await response.json();
+  const posts = data.docs;
+  
+  console.log(`Processing ${posts.length} posts...`);
+  
+  const blogs = posts.map((post: Post) => {
     // Generate slug if it doesn't exist (for backwards compatibility)
     let slug = post.slug;
     if (!slug && post.title) {
