@@ -220,7 +220,7 @@ async function main() {
   
   console.log(`Processing ${posts.length} posts...`);
   
-  const blogs = posts.map((post: Post) => {
+  const blogs = await Promise.all(posts.map(async (post: Post) => {
     // Generate slug if it doesn't exist (for backwards compatibility)
     let slug = post.slug;
     if (!slug && post.title) {
@@ -234,7 +234,37 @@ async function main() {
     let featuredImageUrl = '';
     if (post.featuredImage) {
       if (typeof post.featuredImage === 'string') {
-        featuredImageUrl = post.featuredImage;
+        // Check if it's a Payload media ID vs a URL/filename
+        if (post.featuredImage.match(/^[0-9a-f]{24}$/i)) {
+          // It's a Payload media ID - fetch the media object directly
+          console.log(`🔄 Fetching media object for unpopulated ID: ${post.featuredImage}`);
+          try {
+            const mediaResponse = await fetch(`${process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com'}/api/media/${post.featuredImage}`);
+            if (mediaResponse.ok) {
+              const mediaData = await mediaResponse.json();
+              console.log(`✅ Fetched media data:`, mediaData);
+              if (mediaData.url) {
+                featuredImageUrl = mediaData.url;
+                console.log(`✅ Using fetched media URL: ${featuredImageUrl}`);
+              } else if (mediaData.id) {
+                // Use GridFS ObjectId instead of filename since local files may not exist on Render
+                featuredImageUrl = `${process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com'}/api/gridfs/${mediaData.id}`;
+                console.log(`✅ Constructed GridFS URL from ObjectId: ${featuredImageUrl}`);
+              } else if (mediaData.filename) {
+                // Fallback to filename-based URL (may not work if files aren't on disk)
+                featuredImageUrl = `${process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com'}/api/media/file/${mediaData.filename}`;
+                console.log(`⚠️ Fallback to filename URL: ${featuredImageUrl}`);
+              }
+            } else {
+              console.log(`❌ Failed to fetch media: ${mediaResponse.status}`);
+            }
+          } catch (error) {
+            console.log(`❌ Error fetching media: ${error}`);
+          }
+        } else {
+          // It's already a URL or filename
+          featuredImageUrl = post.featuredImage;
+        }
       } else if (post.featuredImage.gridfsUrl) {
         // First priority: GridFS URL (persistent storage)
         featuredImageUrl = `${process.env.PAYLOAD_API_URL || process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'https://dr-serzhans-psycare.onrender.com'}${post.featuredImage.gridfsUrl}`;
@@ -258,7 +288,7 @@ async function main() {
       featuredImage: featuredImageUrl,
       contentHtml: lexicalToHtml(post.content),
     };
-  });
+  }));
 
   // Write to public directory (for dev) and out directory (for static export)
   const publicPath = path.join(__dirname, '../public/blogs.json');
